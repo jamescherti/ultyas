@@ -12,8 +12,8 @@ setup(
     name="ultyas",
     version="1.0.1",
     packages=find_packages(),
-    description=("Converting code snippets from Ultisnips to "
-                 "YASnippet format."),
+    description=("A tool for converting code snippets from "
+                 "Ultisnips to YASnippet format"),
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     url="https://github.com/jamescherti/ultyas",
@@ -22,7 +22,6 @@ setup(
     install_requires=[],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
-        "License :: OSI Approved :: MIT License",
         "License :: OSI Approved :: GNU General Public License (GPL)",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Environment :: Console",
