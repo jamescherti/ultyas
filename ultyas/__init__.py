@@ -25,6 +25,7 @@
 import sys
 import os
 import argparse
+from pathlib import Path
 
 from .ultisnips import UltisnipsSnippetsFile, UltisnipsParseError
 
@@ -62,6 +63,24 @@ def parse_args():
         "the --yasnippet-dir flag exists",
     )
 
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        default=False,
+        action="store_true",
+        required=False,
+        help="Verbose mode",
+    )
+
+    parser.add_argument(
+        "-q",
+        "--quiet",
+        default=False,
+        action="store_true",
+        required=False,
+        help="Quiet mode",
+    )
+
     return parser.parse_args()
 
 
@@ -69,23 +88,33 @@ def command_line_interface():
     """The command-line interface."""
     args = parse_args()
 
+    ultisnips_file = Path(args.ultisnips_file)
+    yasnippet_dir = Path(args.yasnippet_dir)
+
     ultisnips_snippet = UltisnipsSnippetsFile()
     try:
-        ultisnips_snippet.load(args.ultisnips_file)
+        ultisnips_snippet.load(ultisnips_file)
         if args.mkdir:
-            os.makedirs(args.yasnippet_dir, exist_ok=True)
+            os.makedirs(yasnippet_dir, exist_ok=True)
 
-        if not os.path.isdir(args.yasnippet_dir):
-            print(f"Error: The directory does not exist: {args.yasnippet_dir}",
+        if not os.path.isdir(yasnippet_dir):
+            print(f"Error: The directory does not exist: {yasnippet_dir}",
                   file=sys.stderr)
             sys.exit(1)
 
         list_yasnippet_files = ultisnips_snippet.convert_to_yasnippet(
-            args.yasnippet_dir,
+            yasnippet_dir,
         )
 
-        for yasnippet_file in list_yasnippet_files:
-            print(yasnippet_file)
+        if not args.quiet:
+            if args.verbose:
+                for yasnippet_file in list_yasnippet_files:
+                    print(yasnippet_file)
+
+                print()
+
+            print(f"Successfully converted '{ultisnips_file}' to "
+                  f"'{yasnippet_dir}'.")
     except UltisnipsParseError as err:
         print(f"Parse error: {err}", file=sys.stderr)
         sys.exit(1)

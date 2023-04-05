@@ -7,7 +7,7 @@ With Ultyas, you can effortlessly migrate your code snippets to the YASnippet fo
 ## Installation
 
 ```
-sudo pip install git+https://github.com/jamescherti/ultyas
+sudo pip install ultyas
 ```
 
 ## Usage
@@ -22,4 +22,5 @@ Distributed under terms of the GNU General Public License version 3.
 
 ## Links
 
-- The GitHub repository of 'ultyas': https://github.com/jamescherti/ultyas
+- [Ultyas @PyPI](https://pypi.org/project/ultyas/)
+- [Ultyas @GitHub](https://github.com/jamescherti/ultyas/)
