@@ -98,9 +98,16 @@ class UltisnipsSnippetsFile:
 
     def convert_to_yasnippet(self,
                              directory: os.PathLike,
-                             convert_tab_to: str = "$>") -> List[str]:
-        header_expand_fixed = "# expand-env: ((yas-indent-line 'fixed))\n" \
-            if convert_tab_to == "$>" else ""
+                             convert_tabs_to: str = "$>",
+                             yas_indent_line: str = "") -> List[str]:
+        if yas_indent_line and yas_indent_line not in ("auto", "fixed"):
+            yas_indent_line = ""
+
+        comment_yas_indent_line = (
+            f"# expand-env: ((yas-indent-line '{yas_indent_line}))\n"
+            if yas_indent_line
+            else ""
+        )
 
         result = []
         for snippet_name, snippet_data in self.snippets.items():
@@ -110,10 +117,10 @@ class UltisnipsSnippetsFile:
             header = ("# -*- mode: snippet -*-\n"
                       f"# name: {snippet_name}\n"
                       f"# key: {snippet_name}\n"  # Used to expand
-                      f"{header_expand_fixed}"
+                      f"{comment_yas_indent_line}"
                       "# --\n")
             content = ((header + snippet_data.content.rstrip("\n"))
-                       .replace("\t", convert_tab_to))
+                       .replace("\t", convert_tabs_to))
             if snippet_path.is_file():
                 content_md5sum = hashlib.md5(content.encode()).hexdigest()
                 if content_md5sum == md5sum_file(snippet_path):

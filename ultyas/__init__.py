@@ -31,7 +31,8 @@ from .ultisnips import UltisnipsSnippetsFile, UltisnipsParseError
 
 
 def parse_args():
-    usage = ("%(prog)s <ultisnips-file> -o <yasnippet-major-mode-dir>")
+    usage = ("%(prog)s <file.snippets> "
+             "-o <yasnippet-major-mode-dir>")
     parser = argparse.ArgumentParser(
         description=("A command-line tool for converting code snippets "
                      "from Ultisnips to YASnippet format."),
@@ -49,8 +50,33 @@ def parse_args():
         "-o",
         "--yasnippet-dir",
         required=True,
-        help="The directory of the major mode YASnippet snippets (e.g. "
+        help="The YASnippet snippets major mode directory (e.g. "
         "'~/.emacs.d/snippets/python-mode/')"
+    )
+
+    parser.add_argument(
+        "-i",
+        "--yas-indent-line",
+        default="nothing",
+        choices=["auto", "fixed", "nothing"],
+        required=False,
+        help=("Add one of the following comments to the "
+              "YASnippet snippets that will be generated: "
+              "\"# expand-env: ((yas-indent-line 'fixed))\" or "
+              "\"# expand-env: ((yas-indent-line 'auto))\". "
+              "For information on 'yas-indent-line', visit: "
+              "https://joaotavora.github.io/yasnippet/snippet-reference.html"
+              "#yas-indent-line"),
+    )
+
+    parser.add_argument(
+        "-t",
+        "--convert-tabs-to",
+        default="$>",
+        required=False,
+        help=("Convert the tabs that are in the generated snippets to "
+              "the string passed to this option "
+              "(Default: The indentation marker '$>')"),
     )
 
     parser.add_argument(
@@ -103,7 +129,9 @@ def command_line_interface():
             sys.exit(1)
 
         list_yasnippet_files = ultisnips_snippet.convert_to_yasnippet(
-            yasnippet_dir,
+            directory=yasnippet_dir,
+            convert_tabs_to=args.convert_tabs_to,
+            yas_indent_line=args.yas_indent_line,
         )
 
         if not args.quiet:
