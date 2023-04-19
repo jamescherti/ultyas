@@ -64,7 +64,7 @@ def parse_args():
               "YASnippet snippets that will be generated: "
               "\"# expand-env: ((yas-indent-line 'fixed))\" or "
               "\"# expand-env: ((yas-indent-line 'auto))\". "
-              "For information on 'yas-indent-line', visit: "
+              "For more information on 'yas-indent-line', visit: "
               "https://joaotavora.github.io/yasnippet/snippet-reference.html"
               "#yas-indent-line"),
     )
