@@ -10,7 +10,7 @@ LONG_DESCRIPTION = \
 
 setup(
     name="ultyas",
-    version="1.0.3",
+    version="1.0.4",
     packages=find_packages(),
     description=("A tool for converting code snippets from "
                  "Ultisnips to YASnippet format"),
@@ -28,14 +28,7 @@ setup(
         "Operating System :: POSIX :: Linux",
         "Operating System :: POSIX :: Other",
         "Topic :: Text Editors :: Emacs",
-
-        "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
     ],
     entry_points={
         "console_scripts": [
