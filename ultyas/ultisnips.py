@@ -96,8 +96,7 @@ class UltisnipsSnippetsFile:
                     err = f"{snippet_file}: {line_num}: '{line}'"
                     raise UltisnipsParseError(err)
 
-    def convert_to_yasnippet(self,
-                             directory: os.PathLike,
+    def convert_to_yasnippet(self, directory: os.PathLike,
                              convert_tabs_to: str = "$>",
                              yas_indent_line: str = "") -> List[str]:
         if yas_indent_line and yas_indent_line not in ("auto", "fixed"):
@@ -119,8 +118,10 @@ class UltisnipsSnippetsFile:
                       f"# key: {snippet_name}\n"  # Used to expand
                       f"{comment_yas_indent_line}"
                       "# --\n")
-            content = ((header + snippet_data.content.rstrip("\n"))
-                       .replace("\t", convert_tabs_to))
+            content = \
+                ((header +
+                  self._escape_snippet(snippet_data.content).rstrip("\n"))
+                 .replace("\t", convert_tabs_to))
             if snippet_path.is_file():
                 content_md5sum = hashlib.md5(content.encode()).hexdigest()
                 if content_md5sum == md5sum_file(snippet_path):
@@ -128,5 +129,63 @@ class UltisnipsSnippetsFile:
 
             with open(snippet_path, "w", encoding="utf-8") as fhandler:
                 fhandler.write(content)
+
+        return result
+
+    @staticmethod
+    def _escape_snippet(string: str):
+        r"""Escape '\${}' except when they resemble '${1:}' / '$1'."""
+        numbers = list(map(str, range(0, 10)))
+
+        result = ""
+        inside_item = None
+        index = 0
+        while index < len(string):
+            current_char = string[index]
+            previous_char = string[index - 1] if index > 0 else ""
+            try:
+                next_char = string[index + 1]
+            except IndexError:
+                next_char = ""
+
+            try:
+                after_next_char = string[index + 2]
+            except IndexError:
+                after_next_char = ""
+
+            if inside_item:
+                if inside_item == "${n:}":
+                    if current_char == "}" and previous_char != "\\":
+                        inside_item = None
+                elif inside_item == "$n":
+                    if current_char not in numbers:
+                        inside_item = None
+                else:
+                    raise ValueError
+            elif previous_char != "\\":
+                if current_char == "$":
+                    if next_char in numbers:
+                        inside_item = "$n"
+                    elif next_char == "{" and after_next_char in numbers:
+                        inside_item = "${n:}"
+                        result += string[index]
+                        index += 1
+                    else:
+                        # Escape the current character because it does not
+                        # resemble the patterns '$1' or '${1:}'
+                        # (e.g $any_string).
+                        result += "\\"
+                elif current_char == "\\":
+                    if next_char not in ["{", "}", "\\"]:
+                        # Escape the backslash \ because it does not escape a
+                        # special character such as {}\
+                        result += "\\"
+                elif current_char in ["{", "}"]:
+                    # Escape '{}'
+                    result += "\\"
+
+            # Add the character
+            result += string[index]
+            index += 1
 
         return result
