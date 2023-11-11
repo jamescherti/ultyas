@@ -10,7 +10,7 @@ saving you valuable time and effort.
 
 Here's how to install Ultyas locally to `~/.local/bin/ultyas` using pip:
 ```
-sudo pip install ultyas
+pip install --user ultyas
 ```
 
 ## Usage
