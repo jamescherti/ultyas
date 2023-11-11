@@ -8,6 +8,7 @@ saving you valuable time and effort.
 
 ## Installation
 
+Here's how to install Ultyas locally to `~/.local/bin/ultyas` using pip:
 ```
 sudo pip install ultyas
 ```
@@ -15,7 +16,7 @@ sudo pip install ultyas
 ## Usage
 
 ``` shell
-ultyas ~/.vim/UltiSnips/python.snippets -o ~/.emacs.d/snippets/python-mode/
+~/.local/bin/ultyas ~/.vim/UltiSnips/python.snippets -o ~/.emacs.d/snippets/python-mode/
 ```
 
 ## License
