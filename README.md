@@ -1,8 +1,11 @@
 # Ultyas - Ultisnips to YASnippet Conversion Tool
 
-Ultyas is a command-line tool, written by [James Cherti](https://www.jamescherti.com), designed to simplify the process of converting code snippets from Ultisnips to YASnippet format.
+Ultyas is a command-line tool, written by [James Cherti](https://www.jamescherti.com),
+designed to simplify the process of converting code snippets from Ultisnips to YASnippet
+format.
 
-With Ultyas, you can effortlessly migrate your code snippets to the YASnippet format, saving you valuable time and effort.
+With Ultyas, you can effortlessly migrate your code snippets to the YASnippet format,
+saving you valuable time and effort.
 
 ## Installation
 
