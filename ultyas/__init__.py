@@ -147,7 +147,8 @@ def command_line_interface():
         print(f"Parse error: {err}", file=sys.stderr)
         sys.exit(1)
     except OSError as err:
-        print(f"Error: {err}", file=sys.stderr)
+        print(f"Error: {err.filename}: {err}", file=sys.stderr)
+        print(err.errno)
         sys.exit(1)
 
 

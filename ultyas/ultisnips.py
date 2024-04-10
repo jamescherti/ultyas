@@ -22,6 +22,7 @@
 #
 """Ultisnips to YASnippet Conversion Tool."""
 
+import platform
 import hashlib
 import os
 import re
@@ -52,49 +53,77 @@ class UltisnipsSnippetsFile:
         self.snippets = {}
 
     def load(self, snippet_file: os.PathLike):
-        inside_snippet = False
+        current_block = ""
         line_num = 0
         current_snippet_name = ""
-        current_snippet_content = ""
+        block_content = ""
+
         with open(snippet_file, "r", encoding="utf-8") as fhandler:
-            line_num += 1
             for line in fhandler.readlines():
-                line_strip = line.rstrip("\n").strip()
+                line_num += 1
+                line_strip = re.sub(r"#.*$", "", line.strip())
 
-                if inside_snippet:
-                    if line_strip == "endsnippet":
-                        inside_snippet = False
-                        self.snippets[current_snippet_name] = \
-                            Snippet(name=current_snippet_name,
-                                    content=current_snippet_content)
+                if current_block:
+                    if line_strip == f"end{current_block}":
+                        if current_block == "snippet":
+                            self.snippets[current_snippet_name] = \
+                                Snippet(name=current_snippet_name,
+                                        content=block_content)
+
+                        current_block = ""
+                        current_snippet_name = ""
+
+                        # Ignore other blocks (e.g., global)
+                        continue
                     else:
-                        current_snippet_content += line
+                        block_content += line
+                        continue
 
-                    # Success
+                new_block_found = False
+                for block_name in ["snippet", "global"]:
+                    if re.search(r"^" + re.escape(block_name) + r"\s",
+                                 line_strip):
+                        current_block = block_name
+                        block_content = ""
+                        new_block_found = True
+
+                        if block_name == "snippet":
+                            try:
+                                current_snippet_name = \
+                                    re.split(r"\s+", line)[1]
+                            except IndexError:
+                                line = line.rstrip("\n")
+                                err = (f"Snippet name not specified: "
+                                       f"{snippet_file}: {line_num}: '{line}'")
+                                raise UltisnipsParseError(err) from IndexError
+
+                        break
+
+                if new_block_found:
                     continue
 
-                if re.search(r"^snippet\s", line_strip):
-                    try:
-                        current_snippet_name = re.split(r"\s+", line)[1]
-                    except IndexError:
-                        line = line.rstrip("\n")
-                        err = (f"Snippet name not specified: "
-                               f"{snippet_file}: {line_num}: '{line}'")
-                        raise UltisnipsParseError(err) from IndexError
+                one_liner_found = False
+                for one_liner in ["priority", "post_jump"]:
+                    if re.search(r"^\s*" + re.escape(one_liner) + r"\s",
+                                 line_strip):
+                        one_liner_found = True
+                        break
 
-                    current_snippet_content = ""
-                    inside_snippet = True
-                    continue  # Success
-
-                if re.search(r"\s*priority\s", line):
-                    # Ignore priority
+                if one_liner_found:
                     continue
 
-                line_strip = re.sub(r"#.*$", "", line_strip)  # Comment
+                # Error
                 if line_strip != "":
                     line = line.rstrip("\n")
                     err = f"{snippet_file}: {line_num}: '{line}'"
                     raise UltisnipsParseError(err)
+
+        if current_block:
+            line = line.rstrip("\n")
+            err = \
+                f"{snippet_file}: {line_num}: Unable to find the " \
+                f"end of {current_block}"
+            raise UltisnipsParseError(err)
 
     def convert_to_yasnippet(self, directory: os.PathLike,
                              convert_tabs_to: str = "$>",
@@ -110,7 +139,8 @@ class UltisnipsSnippetsFile:
 
         result = []
         for snippet_name, snippet_data in self.snippets.items():
-            snippet_path = Path(directory).joinpath(snippet_name)
+            snippet_path = \
+                Path(directory).joinpath(self._sanitize_filename(snippet_name))
             result.append(str(snippet_path))
 
             header = ("# -*- mode: snippet -*-\n"
@@ -189,3 +219,31 @@ class UltisnipsSnippetsFile:
             index += 1
 
         return result
+
+    @staticmethod
+    def _sanitize_filename(filename: str) -> str:
+        """
+        Remove invalid characters from a filename to ensure it is valid for most
+        file systems.
+
+        Parameters:
+            filename: The original filename that may contain invalid characters.
+
+        Returns:
+            A sanitized version of the filename without invalid characters.
+        """
+        invalid_chars = {'/', '\0'}
+
+        if platform.system() == "Windows":
+            invalid_chars = {'/', '\\', ':', '*', '?', '"', '<', '>', '|'}
+            for index in range(0, 32):
+                invalid_chars.add(chr(index))
+
+        sanitized_filename = ""
+        for char in filename:
+            if char in invalid_chars:
+                sanitized_filename += hex(ord(char))
+            else:
+                sanitized_filename += char
+
+        return sanitized_filename
