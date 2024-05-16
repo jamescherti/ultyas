@@ -22,9 +22,9 @@
 #
 """Ultisnips to YASnippet Conversion Tool."""
 
-import platform
 import hashlib
 import os
+import platform
 import re
 from pathlib import Path
 from typing import List
@@ -80,7 +80,7 @@ class UltisnipsSnippetsFile:
                         continue
 
                 new_block_found = False
-                for block_name in ["snippet", "global"]:
+                for block_name in ("snippet", "global"):
                     if re.search(r"^" + re.escape(block_name) + r"\s",
                                  line_strip):
                         current_block = block_name
@@ -103,7 +103,7 @@ class UltisnipsSnippetsFile:
                     continue
 
                 one_liner_found = False
-                for one_liner in ["priority", "post_jump"]:
+                for one_liner in ("priority", "post_jump", "context"):
                     if re.search(r"^\s*" + re.escape(one_liner) + r"\s",
                                  line_strip):
                         one_liner_found = True
@@ -223,11 +223,12 @@ class UltisnipsSnippetsFile:
     @staticmethod
     def _sanitize_filename(filename: str) -> str:
         """
-        Remove invalid characters from a filename to ensure it is valid for most
-        file systems.
+        Remove invalid characters from a filename to ensure it is valid for
+        most file systems.
 
         Parameters:
-            filename: The original filename that may contain invalid characters.
+            filename: The original filename that may contain invalid
+            characters.
 
         Returns:
             A sanitized version of the filename without invalid characters.
