@@ -13,9 +13,13 @@ pip install --user ultyas
 
 ## Command usage example
 
+To use Ultyas, simply run the command with the appropriate input and output files. Here is a basic example:
+
 ```
 ~/.local/bin/ultyas ~/.vim/UltiSnips/python.snippets -o ~/.emacs.d/snippets/python-mode/
 ```
+
+This command takes an UltiSnips file `python.snippets` and converts it to a directory that contains YASnippet snippets at `~/.emacs.d/snippets/python-mode/`.
 
 ## Options and flags
 
