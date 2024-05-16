@@ -41,7 +41,7 @@ options:
   -q, --quiet           Quiet mode
 ```
 
-## Example of UltiSnips
+## Example of an UltiSnips snippet that could be converted to Yasnippet
 
 Here is an example of an UltiSnips snippet that can be converted by Ultyas from the UltiSnips format to the Yasnippet format:
 ```
