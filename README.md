@@ -1,6 +1,6 @@
-# Ultyas - Ultisnips to YASnippet Conversion Tool
+# Ultyas - UltiSnips to YASnippet Conversion Tool
 
-Ultyas is a command-line tool designed to simplify the process of converting code snippets from Ultisnips (Vim) to YASnippet format (Emacs).
+Ultyas is a command-line tool designed to simplify the process of converting code snippets from UltiSnips (Vim) to YASnippet format (Emacs).
 
 With Ultyas, you can effortlessly migrate your code snippets to the YASnippet format, saving you valuable time and effort.
 
@@ -22,10 +22,10 @@ pip install --user ultyas
 ```
 usage: ultyas <file.snippets> -o <yasnippet-major-mode-dir>
 
-A command-line tool for converting code snippets from Ultisnips to YASnippet format.
+A command-line tool for converting code snippets from UltiSnips to YASnippet format.
 
 positional arguments:
-  ultisnips_file        The Ultisnips .snippets file (e.g. '~/.vim/UltiSnips/python.snippets')
+  ultisnips_file        The UltiSnips .snippets file (e.g. '~/.vim/UltiSnips/python.snippets')
 
 options:
   -h, --help            show this help message and exit
@@ -39,6 +39,28 @@ options:
   -m, --mkdir           Ensure that the directory passed to the --yasnippet-dir flag exists
   -v, --verbose         Verbose mode
   -q, --quiet           Quiet mode
+```
+
+## Example of UltiSnips
+
+Here is an example of an UltiSnips snippet that can be converted by Ultyas from the UltiSnips format to the Yasnippet format:
+```
+priority 50
+
+snippet if
+if ${1:True}:
+	${2:pass}
+endsnippet
+
+snippet for
+for ${1:_} in ${2:[]}:
+	${3:pass}
+endsnippet
+
+snippet while
+while ${1:True}:
+	${2:pass}
+endsnippet
 ```
 
 ## License
