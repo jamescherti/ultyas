@@ -22,12 +22,12 @@
 #
 """The entry-point of the ultyas command-line tool."""
 
-import sys
-import os
 import argparse
+import os
+import sys
 from pathlib import Path
 
-from .ultisnips import UltisnipsSnippetsFile, UltisnipsParseError
+from .ultisnips import UltisnipsParseError, UltisnipsSnippetsFile
 
 
 def parse_args():
@@ -85,8 +85,7 @@ def parse_args():
         default=False,
         action="store_true",
         required=False,
-        help="Ensure that the directory passed to "
-        "the --yasnippet-dir flag exists",
+        help=argparse.SUPPRESS,
     )
 
     parser.add_argument(
@@ -120,8 +119,12 @@ def command_line_interface():
     ultisnips_snippet = UltisnipsSnippetsFile()
     try:
         ultisnips_snippet.load(ultisnips_file)
-        if args.mkdir:
-            os.makedirs(yasnippet_dir, exist_ok=True)
+        if not yasnippet_dir.parent.is_dir():
+            print(f"Error: The parent directory of {yasnippet_dir} "
+                  "does not exist", file=sys.stderr)
+            sys.exit(1)
+
+        os.mkdir(yasnippet_dir)
 
         if not os.path.isdir(yasnippet_dir):
             print(f"Error: The directory does not exist: {yasnippet_dir}",

@@ -40,7 +40,6 @@ options:
                         'auto))". For more information on 'yas-indent-line', visit: https://joaotavora.github.io/yasnippet/snippet-reference.html#yas-indent-line
   -t CONVERT_TABS_TO, --convert-tabs-to CONVERT_TABS_TO
                         Convert the tabs that are in the generated snippets to the string passed to this option (Default: The indentation marker '$>')
-  -m, --mkdir           Ensure that the directory passed to the --yasnippet-dir flag exists
   -v, --verbose         Verbose mode
   -q, --quiet           Quiet mode
 ```
