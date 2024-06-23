@@ -68,7 +68,7 @@ endsnippet
 
 ## License
 
-Copyright (c) [James Cherti](https://www.jamescherti.com)
+Copyright (C) 2023-2024 [James Cherti](https://www.jamescherti.com)
 
 Distributed under terms of the GNU General Public License version 3.
 

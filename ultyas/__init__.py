@@ -3,7 +3,7 @@
 # Project description: Ultisnips to YASnippet Conversion Tool
 # URL: https://github.com/jamescherti/ultyas
 #
-# Copyright (C) James Cherti
+# Copyright (C) 2023-2024 James Cherti
 #
 # Distributed under terms of the GNU General Public License version 3.
 #
