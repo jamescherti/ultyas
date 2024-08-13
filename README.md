@@ -1,4 +1,5 @@
 # Ultyas - UltiSnips to YASnippet Conversion Tool
+![License](https://img.shields.io/github/license/jamescherti/ultyas)
 
 Ultyas is a command-line tool designed to simplify the process of converting code snippets from UltiSnips (Vim) to YASnippet format (Emacs).
 
