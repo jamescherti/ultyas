@@ -192,12 +192,18 @@ class UltisnipsSnippetsFile:
                         inside_item = None
                 else:
                     raise ValueError
+            elif current_char == "\\":
+                # Preserve the escaping of strings that are already escaped.
+                result += string[index]
+                index += 1
             elif previous_char != "\\":
+                # Escape strings that are not yet escaped.
                 if current_char == "$":
                     if next_char in numbers:
                         inside_item = "$n"
                     elif next_char == "{" and after_next_char in numbers:
                         inside_item = "${n:}"
+                        # Skip the bracket '{'
                         result += string[index]
                         index += 1
                     else:
@@ -207,12 +213,9 @@ class UltisnipsSnippetsFile:
                         result += "\\"
                 elif current_char == "\\":
                     if next_char not in ["{", "}", "\\"]:
-                        # Escape the backslash \ because it does not escape a
+                        # Escape the backslash \ because it is not escaping a
                         # special character such as {}\
                         result += "\\"
-                elif current_char in ["{", "}"]:
-                    # Escape '{}'
-                    result += "\\"
 
             # Add the character
             result += string[index]
