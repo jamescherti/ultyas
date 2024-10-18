@@ -30,7 +30,8 @@ usage: ultyas <file.snippets> -o <yasnippet-major-mode-dir>
 A command-line tool for converting code snippets from UltiSnips to YASnippet format.
 
 positional arguments:
-  ultisnips_file        The UltiSnips .snippets file (e.g. '~/.vim/UltiSnips/python.snippets')
+  ultisnips_file        The UltiSnips .snippets file
+                        (e.g. '~/.vim/UltiSnips/python.snippets')
 
 options:
   -h, --help            show this help message and exit
