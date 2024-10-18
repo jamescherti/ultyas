@@ -10,7 +10,7 @@ LONG_DESCRIPTION = \
 
 setup(
     name="ultyas",
-    version="1.0.9",
+    version="1.1.0",
     packages=find_packages(),
     description=("A tool for converting code snippets from "
                  "Ultisnips to YASnippet format"),
