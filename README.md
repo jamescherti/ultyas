@@ -1,16 +1,22 @@
 # Ultyas - UltiSnips to YASnippet Conversion Tool
 ![License](https://img.shields.io/github/license/jamescherti/ultyas)
 
-Ultyas is a command-line tool designed to simplify the process of converting code snippets from UltiSnips (Vim) to YASnippet format (Emacs).
+Ultyas is a command-line tool that simplifies the process of converting code snippets from **UltiSnips** (Vim/Neovim) to **YASnippet** format (Emacs).
 
-With Ultyas, you can effortlessly migrate your code snippets to the YASnippet format, saving you valuable time and effort.
+Transitioning from Vim/Neovim to Emacs can be difficult. Ultyas addresses this issue by offering a straightforward solution for converting your existing UltiSnips snippets into the compatible YASnippet format.
+
+Ultyas can be used for the following purposes:
+- Migrating your code from UltiSnips to YASnippet format.
+- Maintaining consistent snippets across both Vim/Neovim and Emacs. (Ultyas enables the author to easily switch between Vim and Emacs based on the machine and environment in use, ensuring that the same snippets are available in both editors.)
 
 ## Installation
 
-Here is how to install Ultyas locally to `~/.local/bin/ultyas` using pip:
+Here is how to install Ultyas locally to `~/.local/bin/ultyas` using [pip](https://pypi.org/project/pip/):
 ```
 pip install --user ultyas
 ```
+
+The command above will install Ultyas in the local directory: `~/.local/bin/ultyas`.
 
 ## Command usage example
 
