@@ -216,6 +216,8 @@ class UltisnipsSnippetsFile:
                         # Escape the backslash \ because it is not escaping a
                         # special character such as {}\
                         result += "\\"
+                elif current_char == "`":
+                    result += "\\"
 
             # Add the character
             result += string[index]
