@@ -35,12 +35,17 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -o YASNIPPET_DIR, --yasnippet-dir YASNIPPET_DIR
-                        The YASnippet snippets major mode directory (e.g. '~/.emacs.d/snippets/python-mode/')
+                        The YASnippet snippets major mode directory
+                        (e.g. '~/.emacs.d/snippets/python-mode/')
   -i {auto,fixed,nothing}, --yas-indent-line {auto,fixed,nothing}
-                        Add one of the following comments to the YASnippet snippets that will be generated: "# expand-env: ((yas-indent-line 'fixed))" or "# expand-env: ((yas-indent-line
-                        'auto))". For more information on 'yas-indent-line', visit: https://joaotavora.github.io/yasnippet/snippet-reference.html#yas-indent-line
+                        Add one of the following comments to the YASnippet
+                        snippets that will be generated:
+                        "# expand-env: ((yas-indent-line 'fixed))" or
+                        "# expand-env: ((yas-indent-line 'auto))".
   -t CONVERT_TABS_TO, --convert-tabs-to CONVERT_TABS_TO
-                        Convert the tabs that are in the generated snippets to the string passed to this option (Default: The indentation marker '$>')
+                        Convert the tabs that are in the generated
+                        snippets to the string passed to this
+                        option (Default: The indentation marker '$>')
   -v, --verbose         Verbose mode
   -q, --quiet           Quiet mode
 ```
