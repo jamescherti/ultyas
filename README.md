@@ -7,7 +7,7 @@ Transitioning from Vim/Neovim to Emacs can be difficult. Ultyas addresses this i
 
 Ultyas can be used for the following purposes:
 - Migrating your code from UltiSnips to YASnippet format.
-- Maintaining consistent snippets across both Vim/Neovim and Emacs. (Ultyas enables the author to easily switch between Vim and Emacs based on the machine and environment in use, ensuring that the same snippets are available in both editors.)
+- **Maintaining consistent snippets across both Vim/Neovim and Emacs.** (Ultyas enables the author to easily switch between Vim and Emacs based on the machine and environment in use, ensuring that the same snippets are available in both editors.)
 
 ## Installation
 
