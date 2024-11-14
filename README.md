@@ -65,17 +65,17 @@ priority 50
 
 snippet if
 if ${1:True}:
-	${2:pass}
+  ${2:pass}
 endsnippet
 
 snippet for
 for ${1:_} in ${2:[]}:
-	${3:pass}
+  ${3:pass}
 endsnippet
 
 snippet while
 while ${1:True}:
-	${2:pass}
+  ${2:pass}
 endsnippet
 ```
 
