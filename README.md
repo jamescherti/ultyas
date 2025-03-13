@@ -95,6 +95,7 @@ You should have received a copy of the GNU General Public License along with thi
 
 - [Ultyas @GitHub](https://github.com/jamescherti/ultyas/)
 - [Ultyas @PyPI](https://pypi.org/project/ultyas/)
+- Syntax highlighting: [ultisnips-mode.el @GitHub](https://github.com/jamescherti/ultisnips-mode.el), an Emacs major mode for editing Ultisnips snippet files. This mode provides syntax highlighting to facilitate editing Ultisnips snippets.
 
 Other Emacs packages by the same author:
 - [minimal-emacs.d](https://github.com/jamescherti/minimal-emacs.d): This repository hosts a minimal Emacs configuration designed to serve as a foundation for your vanilla Emacs setup and provide a solid base for an enhanced Emacs experience.
