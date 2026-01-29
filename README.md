@@ -87,7 +87,7 @@ endsnippet
 
 The author maintains all snippets in the original UltiSnips format for Vim and uses [Ultyas](https://github.com/jamescherti/ultyas) to convert them automatically to Yasnippet format for Emacs.
 
-He uses [ultisnips-mode.el](https://github.com/jamescherti/ultisnips-mode.el) in Emacs to edit snippets, providing syntax highlighting and code folding through **hs-minor-mode**.
+He uses the [ultisnips-mode](https://github.com/jamescherti/ultisnips-mode.el) Emacs package to edit snippets, providing syntax highlighting and code folding through **hs-minor-mode**.
 
 This workflow allows editing and storing a single set of snippets while making them available in Vim and Emacs.
 
