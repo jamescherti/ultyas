@@ -9,6 +9,8 @@ Ultyas can be used for the following purposes:
 - Migrating your snippets from UltiSnips to YASnippet format.
 - **Maintaining consistent snippets across both Vim/Neovim and Emacs.** (For instance, the author of Ultyas effortlessly switches between Vim and Emacs depending on the machine and environment, ensuring that the same snippets are accessible in both editors.)
 
+**NOTE:** Emacs users are recommended to install the [ultisnips-mode](https://github.com/jamescherti/ultisnips-mode.el) package, which provides a major mode for editing Ultisnips snippet files (*.snippets). This mode includes syntax highlighting to simplify and improve the editing of Ultisnips snippets.
+
 ## Installation
 
 Here is how to install Ultyas locally to `~/.local/bin/ultyas` using [pip](https://pypi.org/project/pip/):
