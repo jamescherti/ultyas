@@ -103,7 +103,8 @@ class UltisnipsSnippetsFile:
                     continue
 
                 one_liner_found = False
-                for one_liner in ("priority", "post_jump", "context"):
+                for one_liner in ("priority", "post_jump", "context",
+                                  "extends"):
                     if re.search(r"^\s*" + re.escape(one_liner) + r"\s",
                                  line_strip):
                         one_liner_found = True
