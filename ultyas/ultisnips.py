@@ -22,15 +22,16 @@
 #
 """Ultisnips to YASnippet Conversion Tool."""
 
+from __future__ import annotations
+
 import hashlib
-import os
 import platform
 import re
 from pathlib import Path
-from typing import List
 
 
-def md5sum_file(filename):
+def md5sum_file(filename: str | Path) -> str:
+    """Calculate the MD5 checksum of a file."""
     md5 = hashlib.md5()
     with open(filename, "rb") as fhandler:
         for chunk in iter(lambda: fhandler.read(1024), b""):
@@ -39,7 +40,10 @@ def md5sum_file(filename):
 
 
 class Snippet:
-    def __init__(self, name: str, content: str):
+    """Represent a parsed snippet."""
+
+    def __init__(self, name: str, content: str) -> None:
+        """Initialize the snippet with a name and content."""
         self.name = name
         self.content = content
 
@@ -49,16 +53,21 @@ class UltisnipsParseError(Exception):
 
 
 class UltisnipsSnippetsFile:
-    def __init__(self):
-        self.snippets = {}
+    """Parse an Ultisnips snippets file and convert it to YASnippet format."""
 
-    def load(self, snippet_file: os.PathLike):
+    def __init__(self) -> None:
+        """Initialize the UltisnipsSnippetsFile instance."""
+        self.snippets: dict[str, Snippet] = {}
+        self.source_mtime = 0.0
+
+    def load(self, snippet_file: str | Path) -> None:
+        """Load and parse an Ultisnips file."""
         current_block = ""
         line_num = 0
         current_snippet_name = ""
         block_content = ""
 
-        with open(snippet_file, "r", encoding="utf-8") as fhandler:
+        with open(snippet_file, encoding="utf-8") as fhandler:
             for line in fhandler.readlines():
                 line_num += 1
                 line_strip = re.sub(r"#.*$", "", line.strip())
@@ -75,9 +84,9 @@ class UltisnipsSnippetsFile:
 
                         # Ignore other blocks (e.g., global)
                         continue
-                    else:
-                        block_content += line
-                        continue
+
+                    block_content += line
+                    continue
 
                 new_block_found = False
                 for block_name in ("snippet", "global"):
@@ -126,50 +135,69 @@ class UltisnipsSnippetsFile:
                 f"end of {current_block}"
             raise UltisnipsParseError(err)
 
-    def convert_to_yasnippet(self, directory: os.PathLike,
-                             convert_tabs_to: str = "$>",
-                             yas_indent_line: str = "") -> List[str]:
-        if yas_indent_line and yas_indent_line not in ("auto", "fixed"):
-            yas_indent_line = ""
+    def convert_to_yasnippet(self, directory: str | Path,
+                                 convert_tabs_to: str = "$>",
+                                 yas_indent_line: str = "",
+                                 update_only_if_newer: bool = False) -> list[str]:
+            """Convert the loaded Ultisnips to YASnippet format.
 
-        comment_yas_indent_line = (
-            f"# expand-env: ((yas-indent-line '{yas_indent_line}))\n"
-            if yas_indent_line
-            else ""
-        )
+            Args:
+                directory: Target directory for the generated snippets.
 
-        result = []
-        for snippet_name, snippet_data in self.snippets.items():
-            snippet_path = \
-                Path(directory).joinpath(self._sanitize_filename(snippet_name))
-            result.append(str(snippet_path))
+                convert_tabs_to: String to replace tabs with in snippet
+                content.
 
-            header = ("# -*- mode: snippet -*-\n"
-                      f"# name: {snippet_name}\n"
-                      f"# key: {snippet_name}\n"  # Used to expand
-                      f"{comment_yas_indent_line}"
-                      "# --\n")
-            content = \
-                ((header +
-                  self._escape_snippet(snippet_data.content).rstrip("\n"))
-                 .replace("\t", convert_tabs_to))
-            if snippet_path.is_file():
-                content_md5sum = hashlib.md5(content.encode()).hexdigest()
-                if content_md5sum == md5sum_file(snippet_path):
-                    continue
+                yas_indent_line: YASnippet indent line variable setting.
 
-            with open(snippet_path, "w", encoding="utf-8") as fhandler:
-                fhandler.write(content)
+                update_only_if_newer: Skip updating if destination is newer
+                than source.
+            """
+            if yas_indent_line and yas_indent_line not in ("auto", "fixed"):
+                yas_indent_line = ""
 
-        return result
+            comment_yas_indent_line = (
+                f"# expand-env: ((yas-indent-line '{yas_indent_line}))\n"
+                if yas_indent_line
+                else ""
+            )
+
+            result: list[str] = []
+            for snippet_name, snippet_data in self.snippets.items():
+                snippet_path = \
+                    Path(directory).joinpath(self._sanitize_filename(snippet_name))
+                result.append(str(snippet_path))
+
+                if update_only_if_newer and snippet_path.is_file() and self.source_mtime:
+                    if snippet_path.stat().st_mtime >= self.source_mtime:
+                        continue
+
+                header = ("# -*- mode: snippet -*-\n"
+                          f"# name: {snippet_name}\n"
+                          f"# key: {snippet_name}\n"  # Used to expand
+                          f"{comment_yas_indent_line}"
+                          "# --\n")
+                content = \
+                    ((header +
+                      self._escape_snippet(snippet_data.content).rstrip("\n"))
+                     .replace("\t", convert_tabs_to))
+
+                if snippet_path.is_file():
+                    content_md5sum = hashlib.md5(content.encode()).hexdigest()
+                    if content_md5sum == md5sum_file(snippet_path):
+                        continue
+
+                with open(snippet_path, "w", encoding="utf-8") as fhandler:
+                    fhandler.write(content)
+
+            return result
 
     @staticmethod
-    def _escape_snippet(string: str):
+    def _escape_snippet(string: str) -> str:
         r"""Escape '\${}' except when they resemble '${1:}' / '$1'."""
         numbers = list(map(str, range(0, 10)))
 
         result = ""
-        inside_item = None
+        inside_item: str | None = None
         index = 0
         while index < len(string):
             current_char = string[index]

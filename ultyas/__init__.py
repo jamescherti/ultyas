@@ -117,6 +117,7 @@ def command_line_interface():
     yasnippet_dir = Path(args.yasnippet_dir)
 
     ultisnips_snippet = UltisnipsSnippetsFile()
+    # pylint: disable=too-many-try-statements
     try:
         ultisnips_snippet.load(ultisnips_file)
         if not yasnippet_dir.parent.is_dir():
