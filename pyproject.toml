@@ -1,0 +1,57 @@
+#
+# Project description: Ultisnips to YASnippet Conversion Tool
+# URL: https://github.com/jamescherti/ultyas
+#
+# Copyright (C) 2023-2026 James Cherti
+#
+# Distributed under terms of the GNU General Public License version 3.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+
+[build-system]
+requires = ["setuptools>=77.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ultyas"
+version = "1.1.3"
+description = "A tool for converting code snippets from Ultisnips to YASnippet format"
+readme = "README.md"
+authors = [
+  { name = "James Cherti" }
+]
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
+requires-python = ">=3.7, <4"
+dependencies = []
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Console",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: POSIX :: Other",
+  "Topic :: Text Editors :: Emacs",
+  "Programming Language :: Python :: 3",
+]
+
+[project.urls]
+Homepage = "https://github.com/jamescherti/ultyas"
+Repository = "https://github.com/jamescherti/ultyas"
+
+[project.scripts]
+ultyas = "ultyas:command_line_interface"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ultyas*"]
