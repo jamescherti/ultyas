@@ -75,9 +75,9 @@ class UltisnipsSnippetsFile:
                 if current_block:
                     if line_strip == f"end{current_block}":
                         if current_block == "snippet":
-                            self.snippets[current_snippet_name] = \
-                                Snippet(name=current_snippet_name,
-                                        content=block_content)
+                            self.snippets[current_snippet_name] = Snippet(
+                                name=current_snippet_name, content=block_content
+                            )
 
                         current_block = ""
                         current_snippet_name = ""
@@ -90,20 +90,20 @@ class UltisnipsSnippetsFile:
 
                 new_block_found = False
                 for block_name in ("snippet", "global"):
-                    if re.search(r"^" + re.escape(block_name) + r"\s",
-                                 line_strip):
+                    if re.search(r"^" + re.escape(block_name) + r"\s", line_strip):
                         current_block = block_name
                         block_content = ""
                         new_block_found = True
 
                         if block_name == "snippet":
                             try:
-                                current_snippet_name = \
-                                    re.split(r"\s+", line)[1]
+                                current_snippet_name = re.split(r"\s+", line)[1]
                             except IndexError:
                                 line = line.rstrip("\n")
-                                err = (f"Snippet name not specified: "
-                                       f"{snippet_file}: {line_num}: '{line}'")
+                                err = (
+                                    f"Snippet name not specified: "
+                                    f"{snippet_file}: {line_num}: '{line}'"
+                                )
                                 raise UltisnipsParseError(err) from IndexError
 
                         break
@@ -112,10 +112,8 @@ class UltisnipsSnippetsFile:
                     continue
 
                 one_liner_found = False
-                for one_liner in ("priority", "post_jump", "context",
-                                  "extends"):
-                    if re.search(r"^\s*" + re.escape(one_liner) + r"\s",
-                                 line_strip):
+                for one_liner in ("priority", "post_jump", "context", "extends"):
+                    if re.search(r"^\s*" + re.escape(one_liner) + r"\s", line_strip):
                         one_liner_found = True
                         break
 
@@ -130,66 +128,71 @@ class UltisnipsSnippetsFile:
 
         if current_block:
             line = line.rstrip("\n")
-            err = \
-                f"{snippet_file}: {line_num}: Unable to find the " \
-                f"end of {current_block}"
+            err = (
+                f"{snippet_file}: {line_num}: Unable to find the end of {current_block}"
+            )
             raise UltisnipsParseError(err)
 
-    def convert_to_yasnippet(self, directory: str | Path,
-                                 convert_tabs_to: str = "$>",
-                                 yas_indent_line: str = "",
-                                 update_only_if_newer: bool = False) -> list[str]:
-            """Convert the loaded Ultisnips to YASnippet format.
+    def convert_to_yasnippet(
+        self,
+        directory: str | Path,
+        convert_tabs_to: str = "$>",
+        yas_indent_line: str = "",
+        update_only_if_newer: bool = False,
+    ) -> list[str]:
+        """Convert the loaded Ultisnips to YASnippet format.
 
-            Args:
-                directory: Target directory for the generated snippets.
+        Args:
+            directory: Target directory for the generated snippets.
 
-                convert_tabs_to: String to replace tabs with in snippet
-                content.
+            convert_tabs_to: String to replace tabs with in snippet
+            content.
 
-                yas_indent_line: YASnippet indent line variable setting.
+            yas_indent_line: YASnippet indent line variable setting.
 
-                update_only_if_newer: Skip updating if destination is newer
-                than source.
-            """
-            if yas_indent_line and yas_indent_line not in ("auto", "fixed"):
-                yas_indent_line = ""
+            update_only_if_newer: Skip updating if destination is newer
+            than source.
+        """
+        if yas_indent_line and yas_indent_line not in ("auto", "fixed"):
+            yas_indent_line = ""
 
-            comment_yas_indent_line = (
-                f"# expand-env: ((yas-indent-line '{yas_indent_line}))\n"
-                if yas_indent_line
-                else ""
+        comment_yas_indent_line = (
+            f"# expand-env: ((yas-indent-line '{yas_indent_line}))\n"
+            if yas_indent_line
+            else ""
+        )
+
+        result: list[str] = []
+        for snippet_name, snippet_data in self.snippets.items():
+            snippet_path = Path(directory).joinpath(
+                self._sanitize_filename(snippet_name)
             )
+            result.append(str(snippet_path))
 
-            result: list[str] = []
-            for snippet_name, snippet_data in self.snippets.items():
-                snippet_path = \
-                    Path(directory).joinpath(self._sanitize_filename(snippet_name))
-                result.append(str(snippet_path))
+            if update_only_if_newer and snippet_path.is_file() and self.source_mtime:
+                if snippet_path.stat().st_mtime >= self.source_mtime:
+                    continue
 
-                if update_only_if_newer and snippet_path.is_file() and self.source_mtime:
-                    if snippet_path.stat().st_mtime >= self.source_mtime:
-                        continue
+            header = (
+                "# -*- mode: snippet -*-\n"
+                f"# name: {snippet_name}\n"
+                f"# key: {snippet_name}\n"  # Used to expand
+                f"{comment_yas_indent_line}"
+                "# --\n"
+            )
+            content = (
+                header + self._escape_snippet(snippet_data.content).rstrip("\n")
+            ).replace("\t", convert_tabs_to)
 
-                header = ("# -*- mode: snippet -*-\n"
-                          f"# name: {snippet_name}\n"
-                          f"# key: {snippet_name}\n"  # Used to expand
-                          f"{comment_yas_indent_line}"
-                          "# --\n")
-                content = \
-                    ((header +
-                      self._escape_snippet(snippet_data.content).rstrip("\n"))
-                     .replace("\t", convert_tabs_to))
+            if snippet_path.is_file():
+                content_md5sum = hashlib.md5(content.encode()).hexdigest()
+                if content_md5sum == md5sum_file(snippet_path):
+                    continue
 
-                if snippet_path.is_file():
-                    content_md5sum = hashlib.md5(content.encode()).hexdigest()
-                    if content_md5sum == md5sum_file(snippet_path):
-                        continue
+            with open(snippet_path, "w", encoding="utf-8") as fhandler:
+                fhandler.write(content)
 
-                with open(snippet_path, "w", encoding="utf-8") as fhandler:
-                    fhandler.write(content)
-
-            return result
+        return result
 
     @staticmethod
     def _escape_snippet(string: str) -> str:
@@ -267,10 +270,10 @@ class UltisnipsSnippetsFile:
         Returns:
             A sanitized version of the filename without invalid characters.
         """
-        invalid_chars = {'/', '\0'}
+        invalid_chars = {"/", "\0"}
 
         if platform.system() == "Windows":
-            invalid_chars = {'/', '\\', ':', '*', '?', '"', '<', '>', '|'}
+            invalid_chars = {"/", "\\", ":", "*", "?", '"', "<", ">", "|"}
             for index in range(0, 32):
                 invalid_chars.add(chr(index))
 

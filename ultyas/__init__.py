@@ -31,19 +31,19 @@ from .ultisnips import UltisnipsParseError, UltisnipsSnippetsFile
 
 
 def parse_args():
-    usage = ("%(prog)s <file.snippets> "
-             "-o <yasnippet-major-mode-dir>")
+    usage = "%(prog)s <file.snippets> -o <yasnippet-major-mode-dir>"
     parser = argparse.ArgumentParser(
-        description=("A command-line tool for converting code snippets "
-                     "from Ultisnips to YASnippet format."),
+        description=(
+            "A command-line tool for converting code snippets "
+            "from Ultisnips to YASnippet format."
+        ),
         usage=usage,
     )
 
     parser.add_argument(
         "ultisnips_file",
         type=str,
-        help="The Ultisnips .snippets file (e.g. "
-        "'~/.vim/UltiSnips/python.snippets')",
+        help="The Ultisnips .snippets file (e.g. '~/.vim/UltiSnips/python.snippets')",
     )
 
     parser.add_argument(
@@ -51,7 +51,7 @@ def parse_args():
         "--yasnippet-dir",
         required=True,
         help="The YASnippet snippets major mode directory (e.g. "
-        "'~/.emacs.d/snippets/python-mode/')"
+        "'~/.emacs.d/snippets/python-mode/')",
     )
 
     parser.add_argument(
@@ -60,13 +60,15 @@ def parse_args():
         default="nothing",
         choices=["auto", "fixed", "nothing"],
         required=False,
-        help=("Add one of the following comments to the "
-              "YASnippet snippets that will be generated: "
-              "\"# expand-env: ((yas-indent-line 'fixed))\" or "
-              "\"# expand-env: ((yas-indent-line 'auto))\". "
-              "For more information on 'yas-indent-line', visit: "
-              "https://joaotavora.github.io/yasnippet/snippet-reference.html"
-              "#yas-indent-line"),
+        help=(
+            "Add one of the following comments to the "
+            "YASnippet snippets that will be generated: "
+            '"# expand-env: ((yas-indent-line \'fixed))" or '
+            '"# expand-env: ((yas-indent-line \'auto))". '
+            "For more information on 'yas-indent-line', visit: "
+            "https://joaotavora.github.io/yasnippet/snippet-reference.html"
+            "#yas-indent-line"
+        ),
     )
 
     parser.add_argument(
@@ -74,9 +76,11 @@ def parse_args():
         "--convert-tabs-to",
         default="$>",
         required=False,
-        help=("Convert the tabs that are in the generated snippets to "
-              "the string passed to this option "
-              "(Default: The indentation marker '$>')"),
+        help=(
+            "Convert the tabs that are in the generated snippets to "
+            "the string passed to this option "
+            "(Default: The indentation marker '$>')"
+        ),
     )
 
     parser.add_argument(
@@ -121,15 +125,18 @@ def command_line_interface():
     try:
         ultisnips_snippet.load(ultisnips_file)
         if not yasnippet_dir.parent.is_dir():
-            print(f"Error: The parent directory of {yasnippet_dir} "
-                  "does not exist", file=sys.stderr)
+            print(
+                f"Error: The parent directory of {yasnippet_dir} does not exist",
+                file=sys.stderr,
+            )
             sys.exit(1)
 
         os.mkdir(yasnippet_dir)
 
         if not os.path.isdir(yasnippet_dir):
-            print(f"Error: The directory does not exist: {yasnippet_dir}",
-                  file=sys.stderr)
+            print(
+                f"Error: The directory does not exist: {yasnippet_dir}", file=sys.stderr
+            )
             sys.exit(1)
 
         list_yasnippet_files = ultisnips_snippet.convert_to_yasnippet(
@@ -145,8 +152,7 @@ def command_line_interface():
 
                 print()
 
-            print(f"Successfully converted '{ultisnips_file}' to "
-                  f"'{yasnippet_dir}'.")
+            print(f"Successfully converted '{ultisnips_file}' to '{yasnippet_dir}'.")
     except UltisnipsParseError as err:
         print(f"Parse error: {err}", file=sys.stderr)
         sys.exit(1)
@@ -156,5 +162,5 @@ def command_line_interface():
         sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     command_line_interface()
