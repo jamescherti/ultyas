@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 """A setuptools based setup module."""
 
-from setuptools import setup, find_packages
 from pathlib import Path
+
+from setuptools import find_packages, setup
 
 CURRENT_DIRECTORY = Path(__file__).parent.resolve()
 LONG_DESCRIPTION = (CURRENT_DIRECTORY / "README.md").read_text(encoding="utf-8")
