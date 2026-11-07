@@ -2,7 +2,7 @@
 ![License](https://img.shields.io/github/license/jamescherti/ultyas)
 
 - Author: James Cherti <[https://www.jamescherti.com/](https://www.jamescherti.com/)>
-- License: GPL
+- License: GPL 3.0 or later
 
 [Ultyas](https://github.com/jamescherti/ultyas/) is a command-line tool that simplifies the process of converting code snippets from **UltiSnips** (Vim/Neovim) to **YASnippet** format (Emacs).
 
