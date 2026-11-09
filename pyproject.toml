@@ -40,6 +40,8 @@ classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Environment :: Console",
   "Operating System :: POSIX :: Linux",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: OS Independent",
   "Operating System :: POSIX :: Other",
   "Topic :: Text Editors :: Emacs",
   "Programming Language :: Python :: 3",

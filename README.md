@@ -1,5 +1,9 @@
 # Ultyas - UltiSnips to YASnippet Conversion Tool
 ![License](https://img.shields.io/github/license/jamescherti/ultyas)
+[![PyPI Version](https://img.shields.io/pypi/v/ultyas.svg)](https://pypi.org/project/ultyas/)
+![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)
+![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white)
+![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white)
 
 - Author: James Cherti <[https://www.jamescherti.com/](https://www.jamescherti.com/)>
 - License: GPL 3.0 or later
