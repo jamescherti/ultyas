@@ -158,7 +158,6 @@ def command_line_interface():
         sys.exit(1)
     except OSError as err:
         print(f"Error: {err.filename}: {err}", file=sys.stderr)
-        print(err.errno)
         sys.exit(1)
 
 
